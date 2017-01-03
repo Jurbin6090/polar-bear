@@ -1,0 +1,58 @@
+buildscript {
+	ext {
+		kotlinVersion = '1.0.6'
+		springBootVersion = '1.4.3.RELEASE'
+	}
+	repositories {
+		mavenLocal()
+		maven {
+			url 'http://dev.cooksys.com/nexus/repository/maven-public/'
+		}
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
+		classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
+        classpath 'com.cooksys:cook-docker-plugin:0.1.0-SNAPSHOT'
+	}
+}
+
+apply plugin: 'kotlin'
+apply plugin: 'kotlin-spring'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'com.cooksys.docker'
+apply plugin: 'application'
+
+
+group 'com.cooksys'
+version '0.0.1-SNAPSHOT'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+	mavenLocal()
+	maven {
+		url 'http://dev.cooksys.com/nexus/repository/maven-public/'
+	}
+	mavenCentral()
+}
+
+
+dependencies {
+    //Kotlin
+    compile "org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}"
+
+    //Spring boot
+	compile 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	compile 'org.springframework.boot:spring-boot-starter-web'
+
+    //Jackson
+	compile 'com.fasterxml.jackson.module:jackson-module-kotlin'
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8'
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
+    //Testing
+	testCompile 'org.springframework.boot:spring-boot-starter-test'
+}
