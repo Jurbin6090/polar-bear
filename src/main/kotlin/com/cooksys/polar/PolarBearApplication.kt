@@ -10,6 +10,7 @@ fun main(args: Array<String>) {
 
 @SpringBootApplication
 @RestController
+@CrossOrigin
 class PolarBearApplication(val repo: DeploymentRepository, val clientService: ClientService) {
 
     @GetMapping("/deployment")
