@@ -8,10 +8,9 @@ fun main(args: Array<String>) {
     SpringApplication.run(PolarBearApplication::class.java, *args)
 }
 
-
 @SpringBootApplication
 @RestController
-class PolarBearApplication(val repo: DeploymentRepository) {
+class PolarBearApplication(val repo: DeploymentRepository, val clientService: ClientService) {
 
     @GetMapping("/deployment")
     fun listDeployments(): List<Deployment> = repo.findAll()
@@ -44,6 +43,21 @@ class PolarBearApplication(val repo: DeploymentRepository) {
                 billing = deployment.billing ?: existing.billing)
 
         return repo.save(merged)
+    }
+
+
+    @GetMapping("/employee/{id}")
+    fun getEmployeeDeployments(@PathVariable id: Int): DeploymentSummery {
+
+        val (current, previous) = repo.findByEmployeeId(id).partition { it.dates?.endDate == null }
+
+        fun toSimple(dep: Deployment): SimpleDeployment = SimpleDeployment(
+                deploymentId = dep.id,
+                clientId = dep.clientId,
+                clientName = clientService.getClient(dep.clientId!!)?.name?:"unknown")
+
+
+        return DeploymentSummery(current = current.map(::toSimple), previous = previous.map(::toSimple))
     }
 }
 

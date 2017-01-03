@@ -52,6 +52,7 @@ dependencies {
     //Spring boot
 	compile 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.springframework.boot:spring-boot-starter-cache'
 
     //Jackson
 	compile 'com.fasterxml.jackson.module:jackson-module-kotlin'
