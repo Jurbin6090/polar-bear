@@ -39,6 +39,11 @@ repositories {
 	mavenCentral()
 }
 
+docker {
+    javaApplication {
+        ports = [8088]
+    }
+}
 
 dependencies {
     //Kotlin
