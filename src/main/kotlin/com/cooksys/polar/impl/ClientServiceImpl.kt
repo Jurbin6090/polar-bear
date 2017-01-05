@@ -3,7 +3,6 @@ package com.cooksys.polar.impl
 import com.cooksys.polar.Client
 import com.cooksys.polar.ClientService
 import com.cooksys.polar.Config
-import org.slf4j.LoggerFactory
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate

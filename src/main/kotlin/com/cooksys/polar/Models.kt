@@ -6,34 +6,44 @@ import java.time.LocalDate
 /**
  * Created by ft4 on 2017-01-03.
  */
-data class Deployment(var id: String?,
-                      @Indexed var employeeId: Int?,
-                      @Indexed var clientId: String?,
-                      var recruiter: Int?,
-                      var dates: DeploymentDates?,
-                      var address: Address?,
-                      var manager: Person?,
-                      var billing: Billing?)
+data class Deployment(val id: String?,
+                      @Indexed val employeeId: Int,
+                      @Indexed val clientId: String,
+                      val recruiter: Int,
+                      val dates: DeploymentDates,
+                      val address: Address,
+                      val manager: Person?,
+                      val billing: Billing)
 
 
-data class DeploymentDates(var startDate: LocalDate, var endDate: LocalDate, var projectedEndDate: LocalDate)
+data class PatchDeployment(val id: String?,
+                      @Indexed val employeeId: Int?,
+                      @Indexed val clientId: String?,
+                      val recruiter: Int?,
+                      val dates: DeploymentDates?,
+                      val address: Address?,
+                      val manager: Person?,
+                      val billing: Billing?)
 
 
-data class Address(var street1: String, var street2: String, var city: String, var state: String, var zip: String, var country: String)
+data class DeploymentDates(val startDate: LocalDate, val endDate: LocalDate?, val projectedEndDate: LocalDate)
 
 
-data class Person(var name: String, var email: String, var phone: String)
+data class Address(val street1: String, val street2: String?, val city: String, val state: String, val zip: String, val country: String)
 
 
-data class Billing(var rate: Double, var cycle: String, var taxable: Boolean, var mgmtSvcSurcharge: Double)
+data class Person(val name: String, val email: String?, val phone: String?)
+
+
+data class Billing(val rate: Double, val cycle: String, val taxable: Boolean, val mgmtSvcSurcharge: Double?)
 
 
 
-data class DeploymentSummery(var current: List<SimpleDeployment>, var previous: List<SimpleDeployment>)
+data class DeploymentSummery(val current: List<SimpleDeployment>, val previous: List<SimpleDeployment>)
 
-data class SimpleDeployment(var deploymentId: String?, var clientId: String?, var clientName: String?)
+data class SimpleDeployment(val deploymentId: String?, val clientId: String?, val clientName: String?)
 
 
-data class Client(var id: String, var name: String, var address : Address?)
+data class Client(val id: String, val name: String, val address : Address?)
 
 

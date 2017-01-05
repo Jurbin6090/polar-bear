@@ -11,28 +11,27 @@ fun main(args: Array<String>) {
 @SpringBootApplication
 @RestController
 @CrossOrigin
+@RequestMapping("/deployment")
 class PolarBearApplication(val repo: DeploymentRepository, val clientService: ClientService) {
 
-    @GetMapping("/deployment")
+    @GetMapping
     fun listDeployments(): List<Deployment> = repo.findAll()
 
-    @GetMapping("/deployment/{id}")
+    @GetMapping("/{id}")
     fun getDeployment(@PathVariable("id") id: String): Deployment? = repo.findOne(id)
 
-    @PostMapping("/deployment")
+    @PostMapping
     fun createDeployment(@RequestBody deployment : Deployment): Deployment = repo.save(deployment)
 
-    @DeleteMapping("/deployment/{id}")
+    @PutMapping
+    fun replaceDeployment(@RequestBody deployment : Deployment): Deployment = repo.save(deployment)
+
+    @DeleteMapping("/{id}")
     fun deleteDeployment(@PathVariable id: String): Unit = repo.delete(id)
 
-    @PutMapping("/deployment")
-    fun replaceDeployment(@RequestBody deployment: Deployment): Deployment = repo.save(deployment)
-
-    @PatchMapping("/deployment/{id}")
-    fun patchDeployment(@PathVariable id: String, @RequestBody deployment: Deployment): Deployment {
-
+    @PatchMapping("/{id}")
+    fun patchDeployment(@PathVariable id: String, @RequestBody deployment: PatchDeployment): Deployment {
         val existing = repo.findOne(id)
-
         val merged = existing.copy(
                 id = deployment.id ?: existing.id,
                 employeeId = deployment.employeeId ?: existing.employeeId,
@@ -42,20 +41,24 @@ class PolarBearApplication(val repo: DeploymentRepository, val clientService: Cl
                 address = deployment.address ?: existing.address,
                 manager = deployment.manager ?: existing.manager,
                 billing = deployment.billing ?: existing.billing)
+        val saved = repo.save(merged)
 
-        return repo.save(merged)
+        if(existing.id != saved.id) {
+            repo.delete(existing.id)
+        }
+
+        return saved
     }
-
 
     @GetMapping("/employee/{id}")
     fun getEmployeeDeployments(@PathVariable id: Int): DeploymentSummery {
 
-        val (current, previous) = repo.findByEmployeeId(id).partition { it.dates?.endDate == null }
+        val (current, previous) = repo.findByEmployeeId(id).partition { it.dates.endDate == null }
 
         fun toSimple(dep: Deployment): SimpleDeployment = SimpleDeployment(
                 deploymentId = dep.id,
                 clientId = dep.clientId,
-                clientName = clientService.getClient(dep.clientId!!)?.name?:"unknown")
+                clientName = clientService.getClient(dep.clientId)?.name?:"unknown")
 
 
         return DeploymentSummery(current = current.map(::toSimple), previous = previous.map(::toSimple))
