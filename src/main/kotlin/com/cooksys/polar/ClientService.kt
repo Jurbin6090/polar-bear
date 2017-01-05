@@ -5,6 +5,10 @@ package com.cooksys.polar
  */
 interface ClientService {
 
-    fun getClient(id: String): Client?
+    fun getClientFromProject(projectId: String): Client?
+
+    fun getClient(clientId: String): Client?
+
+    fun getProject(projectId : String): Project?
 
 }

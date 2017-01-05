@@ -8,22 +8,20 @@ import java.time.LocalDate
  */
 data class Deployment(val id: String?,
                       @Indexed val employeeId: Int,
-                      @Indexed val clientId: String,
-                      val recruiter: Int,
+                      @Indexed val projectId: String,
                       val dates: DeploymentDates,
                       val address: Address,
                       val manager: Person?,
-                      val billing: Billing)
+                      val billing: Billing?)
 
 
 data class PatchDeployment(val id: String?,
-                      @Indexed val employeeId: Int?,
-                      @Indexed val clientId: String?,
-                      val recruiter: Int?,
-                      val dates: DeploymentDates?,
-                      val address: Address?,
-                      val manager: Person?,
-                      val billing: Billing?)
+                           val employeeId: Int?,
+                           val projectId: String?,
+                           val dates: DeploymentDates?,
+                           val address: Address?,
+                           val manager: Person?,
+                           val billing: Billing?)
 
 
 data class DeploymentDates(val startDate: LocalDate, val endDate: LocalDate?, val projectedEndDate: LocalDate)
@@ -46,4 +44,5 @@ data class SimpleDeployment(val deploymentId: String?, val clientId: String?, va
 
 data class Client(val id: String, val name: String, val address : Address?)
 
+data class Project(val id: String, val clientId: String)
 

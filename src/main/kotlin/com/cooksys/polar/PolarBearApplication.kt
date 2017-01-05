@@ -35,8 +35,7 @@ class PolarBearApplication(val repo: DeploymentRepository, val clientService: Cl
         val merged = existing.copy(
                 id = deployment.id ?: existing.id,
                 employeeId = deployment.employeeId ?: existing.employeeId,
-                recruiter = deployment.recruiter ?: existing.recruiter,
-                clientId = deployment.clientId ?: existing.clientId,
+                projectId = deployment.projectId ?: existing.projectId,
                 dates = deployment.dates ?: existing.dates,
                 address = deployment.address ?: existing.address,
                 manager = deployment.manager ?: existing.manager,
@@ -57,8 +56,8 @@ class PolarBearApplication(val repo: DeploymentRepository, val clientService: Cl
 
         fun toSimple(dep: Deployment): SimpleDeployment = SimpleDeployment(
                 deploymentId = dep.id,
-                clientId = dep.clientId,
-                clientName = clientService.getClient(dep.clientId)?.name?:"unknown")
+                clientId = dep.projectId,
+                clientName = clientService.getClientFromProject(dep.projectId)?.name?:"unknown")
 
 
         return DeploymentSummery(current = current.map(::toSimple), previous = previous.map(::toSimple))
